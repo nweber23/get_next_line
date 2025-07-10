@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:20:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/10 17:52:56 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/10 18:35:26 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char	*cleaner(char **ptr)
 	return (NULL);
 }
 
-static char	*get_line(char *leftover)
+static char	*get_line(char **leftover)
 {
 	char	*line;
 	char	*newline;
@@ -31,20 +31,20 @@ static char	*get_line(char *leftover)
 
 	if (!*leftover)
 		return (NULL);
-	newline = ft_strchr(leftover, '\n');
+	newline = ft_strchr(*leftover, '\n');
 	if (!newline)
 	{
-		line = ft_strdup(leftover);
-		cleaner(&leftover);
+		line = ft_strdup(*leftover);
+		cleaner(leftover);
 		return (line);
 	}
 	len = (size_t)(newline - *leftover) + 1;
-	line = ft_substr(leftover, 0, len);
+	line = ft_substr(*leftover, 0, len);
 	if (!line)
-		return (cleaner(&leftover));
-	temp_leftover = ft_strdup(leftover + len);
-	cleaner(&leftover);
-	*leftover = *temp_leftover;
+		return (cleaner(leftover));
+	temp_leftover = ft_strdup(*leftover + len);
+	cleaner(leftover);
+	*leftover = temp_leftover;
 	return (line);
 }
 
@@ -60,6 +60,11 @@ static char	*find_nextline(int fd, char *leftover)
 	b_read = 1;
 	if (!leftover)
 		leftover = ft_strdup("");
+	if (!leftover)
+	{
+		free(buffer);
+		return (NULL);
+	}
 	while (!ft_strchr(leftover, '\n') && b_read > 0)
 	{
 		b_read = read(fd, buffer, BUFFER_SIZE);
@@ -90,6 +95,6 @@ char	*get_next_line(int fd)
 	leftover = find_nextline(fd, leftover);
 	if (!leftover || !*leftover)
 		return (cleaner(&leftover));
-	line = get_line(leftover);
+	line = get_line(&leftover);
 	return (line);
 }
