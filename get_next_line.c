@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:20:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/10 16:59:53 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/10 17:29:36 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,27 @@ static char	*cleaner(char **ptr)
 
 static char	*line_get(char *leftover)
 {
+	char	*line;
+	char	*newline;
+	char	*temp_leftover;
+	size_t	len;
 
+	newline = ft_strchr(leftover, '\n');
+	if (!newline)
+	{
+		line = ft_strdup(leftover);
+		cleaner(leftover);
+		return (line);
+	}
+	len = newline - *leftover + 1;
+	line = ft_substr(*leftover, 0, len);
+	if (!line)
+		return (cleaner(leftover));
+	temp_leftover = ft_strdup(*leftover + len);
+	cleaner(leftover);
+	*leftover = temp_leftover;
+	free(temp_leftover);
+	return (line);
 }
 
 static char	find_nextline(int fd, char *leftover)
