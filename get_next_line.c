@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:20:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/10 14:26:41 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/10 14:37:49 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,6 @@ char	*get_next_line(int fd)
 {
 	static char	*leftover;
 
-	if (fd  < 0|| BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 }

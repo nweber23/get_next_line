@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:20:19 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/10 13:26:12 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/10 14:27:56 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+char	*get_next_line(int fd);
 size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *s1);
 char	*ft_strchr(const char *s, int c);
