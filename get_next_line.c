@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:20:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/10 17:29:36 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/10 17:46:06 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char	*cleaner(char **ptr)
 	return (NULL);
 }
 
-static char	*line_get(char *leftover)
+static char	*get_line(char *leftover)
 {
 	char	*line;
 	char	*newline;
@@ -33,24 +33,23 @@ static char	*line_get(char *leftover)
 	if (!newline)
 	{
 		line = ft_strdup(leftover);
-		cleaner(leftover);
+		cleaner(&leftover);
 		return (line);
 	}
-	len = newline - *leftover + 1;
-	line = ft_substr(*leftover, 0, len);
+	len = (size_t)newline - *leftover + 1;
+	line = ft_substr(leftover, 0, len);
 	if (!line)
-		return (cleaner(leftover));
-	temp_leftover = ft_strdup(*leftover + len);
-	cleaner(leftover);
-	*leftover = temp_leftover;
-	free(temp_leftover);
+		return (cleaner(&leftover));
+	temp_leftover = ft_strdup(leftover + len);
+	cleaner(&leftover);
+	*leftover = *temp_leftover;
 	return (line);
 }
 
-static char	find_nextline(int fd, char *leftover)
+static char	*find_nextline(int fd, char *leftover)
 {
 	char	*buffer;
-	size_t	b_read;
+	ssize_t	b_read;
 
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
@@ -59,7 +58,7 @@ static char	find_nextline(int fd, char *leftover)
 	while (!ft_strchr(leftover, '\n') && b_read > 0)
 	{
 		b_read = read(fd, buffer, BUFFER_SIZE);
-		if (b_read == -1)
+		if (b_read == (ssize_t) - 1)
 		{
 			free(buffer);
 			return (cleaner(&leftover));
@@ -76,7 +75,13 @@ static char	find_nextline(int fd, char *leftover)
 char	*get_next_line(int fd)
 {
 	static char	*leftover;
+	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
+	leftover = find_nextline(fd, leftover);
+	if (!leftover || !*leftover)
+		return (cleaner(&leftover));
+	line = get_line(leftover);
+	return (line);
 }
