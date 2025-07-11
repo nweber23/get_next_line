@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:20:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/10 18:35:26 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/11 11:16:46 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static char	*get_line(char **leftover)
 	char	*temp_leftover;
 	size_t	len;
 
-	if (!*leftover)
-		return (NULL);
+	if (!*leftover || !**leftover)
+		return (cleaner(leftover));
 	newline = ft_strchr(*leftover, '\n');
 	if (!newline)
 	{
@@ -44,6 +44,11 @@ static char	*get_line(char **leftover)
 		return (cleaner(leftover));
 	temp_leftover = ft_strdup(*leftover + len);
 	cleaner(leftover);
+	if (!temp_leftover)
+	{
+		free(line);
+		return (NULL);
+	}
 	*leftover = temp_leftover;
 	return (line);
 }
@@ -56,7 +61,7 @@ static char	*find_nextline(int fd, char *leftover)
 
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
-		return (NULL);
+		return (cleaner(&leftover));
 	b_read = 1;
 	if (!leftover)
 		leftover = ft_strdup("");
@@ -71,8 +76,7 @@ static char	*find_nextline(int fd, char *leftover)
 		if (b_read == (ssize_t) - 1)
 		{
 			free(buffer);
-			free(leftover);
-			return (NULL);
+			return (cleaner(&leftover));
 		}
 		buffer[b_read] = '\0';
 		tmp = leftover;
