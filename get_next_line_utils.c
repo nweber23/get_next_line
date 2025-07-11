@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:20:36 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/11 19:08:04 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/11 19:39:12 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,22 +50,44 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	substr = (char *)malloc(len + 1);
 	if (!substr)
 		return (NULL);
-	ft_strlcpy(substr, s + start, len + 1);
+	ft_memcpy(substr, s + start, len);
+	substr[len] = '\0';
 	return (substr);
 }
 
-size_t	ft_strlcpy(char *dest, const char *src, size_t size)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
+	char	*str;
+	size_t	i;
+	size_t	j;
+
+	str = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (s1[i++])
+		str[i] = s1[i];
+	j = 0;
+	while (s2[j])
+		str[i++] = s2[j++];
+	str[i] = '\0';
+	return (str);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*dest;
 	size_t	i;
 
+	dest = (char *)malloc(ft_strlen(s1) + 1);
+	if (!dest)
+		return (NULL);
 	i = 0;
-	if (size == 0)
-		return (ft_strlen(src));
-	while (src[i] && i < size - 1)
+	while (i < ft_strlen(s1))
 	{
-		dest[i] = src[i];
+		dest[i] = s1[i];
 		i++;
 	}
 	dest[i] = '\0';
-	return (ft_strlen(src));
+	return (dest);
 }
