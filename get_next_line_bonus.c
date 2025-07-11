@@ -6,11 +6,11 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 12:04:23 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/11 12:11:35 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/11 13:17:37 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static char	*cleaner(char **ptr)
 {
@@ -81,10 +81,10 @@ static char	*find_nextline(int fd, char *leftover)
 
 char	*get_next_line(int fd)
 {
-	static char	*leftover[1024];
+	static char	*leftover[OPEN_MAX];
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || fd >= 1024)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd >= OPEN_MAX)
 		return (NULL);
 	leftover[fd] = find_nextline(fd, leftover[fd]);
 	if (!leftover[fd] || !*leftover[fd])

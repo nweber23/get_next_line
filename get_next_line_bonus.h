@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 12:03:59 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/11 12:06:59 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/11 13:13:26 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
+# include <limits.h>
 
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *s);
