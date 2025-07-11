@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:20:19 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/11 18:20:28 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/11 19:07:41 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,8 @@
 
 char	*get_next_line(int fd);
 char	*ft_strchr(const char *s, int c);
-char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlen(const char *s);
-char	*ft_strcpy(char *dest, const char *src);
-void	*ft_memcpy(void *restrict dest, const void *restrict src, size_t n);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 
 #endif

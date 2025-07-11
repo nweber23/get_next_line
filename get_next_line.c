@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:20:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/11 18:59:39 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/11 19:07:36 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,13 @@ static char	*ft_read(int fd, char *buffer, char *line, size_t *b_read)
 
 static void	extract_line(char *line)
 {
+	size_t	i;
 
+	i = 0;
+	while (line[i] && line[i] != '\n')
+		i++;
+	if (line[i] == '\n')
+		ft_substr(line, 0, i + 1);
 }
 
 static void	buffer_clean(char *buffer)
