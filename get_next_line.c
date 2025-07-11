@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:20:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/11 11:16:46 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/11 11:20:00 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,7 @@ static char	*get_line(char **leftover)
 	temp_leftover = ft_strdup(*leftover + len);
 	cleaner(leftover);
 	if (!temp_leftover)
-	{
-		free(line);
-		return (NULL);
-	}
+		return (free(line), NULL);
 	*leftover = temp_leftover;
 	return (line);
 }
@@ -66,18 +63,12 @@ static char	*find_nextline(int fd, char *leftover)
 	if (!leftover)
 		leftover = ft_strdup("");
 	if (!leftover)
-	{
-		free(buffer);
-		return (NULL);
-	}
+		return (free(buffer), NULL);
 	while (!ft_strchr(leftover, '\n') && b_read > 0)
 	{
 		b_read = read(fd, buffer, BUFFER_SIZE);
 		if (b_read == (ssize_t) - 1)
-		{
-			free(buffer);
-			return (cleaner(&leftover));
-		}
+			return (free(buffer), cleaner(&leftover));
 		buffer[b_read] = '\0';
 		tmp = leftover;
 		leftover = ft_strjoin(leftover, buffer);
@@ -85,8 +76,7 @@ static char	*find_nextline(int fd, char *leftover)
 		if (!leftover)
 			break ;
 	}
-	free(buffer);
-	return (leftover);
+	return (free(buffer), leftover);
 }
 
 char	*get_next_line(int fd)
