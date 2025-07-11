@@ -6,31 +6,11 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:20:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/11 18:58:55 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/11 18:59:39 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-static char	*ft_strdup(const char *s1)
-{
-	char	*dup;
-	size_t	len;
-	size_t	i;
-
-	len = ft_strlen(s1);
-	dup = malloc(len + 1);
-	if (!dup)
-		return (NULL);
-	i = 0;
-	while (i < len)
-	{
-		dup[i] = s1[i];
-		i++;
-	}
-	dup[i] = '\0';
-	return (dup);
-}
 
 static char	*ft_read(int fd, char *buffer, char *line, size_t *b_read)
 {
