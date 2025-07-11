@@ -77,7 +77,7 @@ static void	buffer_clean(char *buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE + 1];
+	static char	buffer[BUFFER_SIZE + 1] = {0};
 	int			b_read;
 	char		*line;
 	char		*temp;
