@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:20:36 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/08 16:20:42 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/11 10:31:16 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ char	*ft_strchr(const char *s, int c)
 	int	i;
 
 	i = 0;
+	if (!s)
+		return (NULL);
 	while (s[i] && s[i] != (char)c)
 		i++;
 	if (s[i] == (char)c)
@@ -70,6 +72,8 @@ char	*ft_strdup(const char *s1)
 	char	*dest;
 	size_t	i;
 
+	if (!s1)
+		return (NULL);
 	dest = (char *)malloc(ft_strlen(s1) + 1);
 	if (!dest)
 		return (NULL);
