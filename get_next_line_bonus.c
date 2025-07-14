@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 12:04:23 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/14 09:54:20 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/14 13:21:21 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,21 +78,23 @@ static void	buffer_clean(char *buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE + 1][FOPEN_MAX];
+	static char	buffer[FOPEN_MAX][BUFFER_SIZE + 1];
 	int			b_read;
 	char		*line;
 	char		*temp;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, buffer, 0) == -1)
-		return (ft_memcpy(buffer, "\0", 1), NULL);
-	line = ft_strdup(buffer);
+	if (fd < 0 || fd >= FOPEN_MAX || BUFFER_SIZE <= 0)
+		return (NULL);
+	if (read(fd, buffer[fd], 0) == -1)
+		return (ft_memcpy(buffer[fd], "\0", 1), NULL);
+	line = ft_strdup(buffer[fd]);
 	if (!line)
 		return (NULL);
-	line = ft_read(fd, buffer, line, &b_read);
+	line = ft_read(fd, buffer[fd], line, &b_read);
 	if (!line)
 		return (NULL);
 	if (ft_strlen(line) == 0 && b_read == 0)
 		return (free(line), NULL);
 	temp = extract_line(line);
-	return (buffer_clean(buffer), free(line), temp);
+	return (buffer_clean(buffer[fd]), free(line), temp);
 }
