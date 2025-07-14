@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 12:03:23 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/11 12:11:52 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/14 09:54:34 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ size_t	ft_strlen(const char *s)
 	size_t	len;
 
 	len = 0;
-	if (!s)
-		return (0);
 	while (s[len])
 		len++;
 	return (len);
@@ -26,72 +24,21 @@ size_t	ft_strlen(const char *s)
 
 char	*ft_strchr(const char *s, int c)
 {
-	int	i;
-
-	i = 0;
-	if (!s)
-		return (NULL);
-	while (s[i] && s[i] != (char)c)
-		i++;
-	if (s[i] == (char)c)
-		return ((char *)&s[i]);
+	while (*s)
+	{
+		if (*s == (char)c)
+			return ((char *)s);
+		s++;
+	}
+	if ((char)c == '\0')
+		return ((char *)s);
 	return (NULL);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	size_t	len1;
-	size_t	len2;
-	size_t	i;
-	char	*joined;
-
-	if (!s1 || !s2)
-		return (NULL);
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	joined = (char *)malloc(len1 + len2 + 1);
-	if (!joined)
-		return (NULL);
-	i = 0;
-	while (i < len1)
-	{
-		joined[i] = s1[i];
-		i++;
-	}
-	while (i < len1 + len2)
-	{
-		joined[i] = s2[i - len1];
-		i++;
-	}
-	joined[i] = '\0';
-	return (joined);
-}
-
-char	*ft_strdup(const char *s1)
-{
-	char	*dest;
-	size_t	i;
-
-	if (!s1)
-		return (NULL);
-	dest = (char *)malloc(ft_strlen(s1) + 1);
-	if (!dest)
-		return (NULL);
-	i = 0;
-	while (i < ft_strlen(s1))
-	{
-		dest[i] = s1[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
 }
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char	*substr;
 	size_t	s_len;
-	size_t	i;
 
 	if (!s)
 		return (NULL);
@@ -103,12 +50,47 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	substr = (char *)malloc(len + 1);
 	if (!substr)
 		return (NULL);
+	ft_memcpy(substr, s + start, len);
+	substr[len] = '\0';
+	return (substr);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*str;
+	size_t	i;
+	size_t	j;
+
+	str = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!str)
+		return (NULL);
 	i = 0;
-	while (i < len)
+	while (s1[i])
 	{
-		substr[i] = s[start + i];
+		str[i] = s1[i];
 		i++;
 	}
-	substr[i] = '\0';
-	return (substr);
+	j = 0;
+	while (s2[j])
+		str[i++] = s2[j++];
+	str[i] = '\0';
+	return (str);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*dest;
+	size_t	i;
+
+	dest = (char *)malloc(ft_strlen(s1) + 1);
+	if (!dest)
+		return (NULL);
+	i = 0;
+	while (i < ft_strlen(s1))
+	{
+		dest[i] = s1[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
 }

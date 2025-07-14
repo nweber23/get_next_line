@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:20:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/11 19:50:44 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/14 09:53:46 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,13 @@ static void	buffer_clean(char *buffer)
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
 	if (buffer[i] == '\n')
-		ft_memcpy(buffer, ft_strchr(buffer, '\n') + 1, ft_strlen(ft_strchr(buffer, '\n')));
+		ft_memcpy(buffer, ft_strchr(buffer, '\n') + 1,
+			ft_strlen(ft_strchr(buffer, '\n')));
 }
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE + 1] = {0};
+	static char	buffer[BUFFER_SIZE + 1];
 	int			b_read;
 	char		*line;
 	char		*temp;

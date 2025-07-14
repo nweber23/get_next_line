@@ -6,89 +6,93 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 12:04:23 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/11 13:17:37 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/14 09:54:20 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-static char	*cleaner(char **ptr)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	if (*ptr)
+	unsigned char		*d;
+	const unsigned char	*s;
+	size_t				i;
+
+	if (!dest && !src)
+		return (NULL);
+	d = (unsigned char *)dest;
+	s = (const unsigned char *)src;
+	i = 0;
+	while (i < n)
 	{
-		free(*ptr);
-		*ptr = NULL;
+		d[i] = s[i];
+		i++;
 	}
-	return (NULL);
+	return (dest);
 }
 
-static char	*get_line(char **leftover)
+static char	*ft_read(int fd, char *buffer, char *line, int *b_read)
 {
-	char	*line;
-	char	*newline;
-	char	*temp_leftover;
-	size_t	len;
+	char	*temp;
 
-	if (!*leftover || !**leftover)
-		return (cleaner(leftover));
-	newline = ft_strchr(*leftover, '\n');
-	if (!newline)
+	*b_read = 1;
+	while (!ft_strchr(buffer, '\n') && *b_read != 0)
 	{
-		line = ft_strdup(*leftover);
-		cleaner(leftover);
-		return (line);
+		*b_read = read(fd, buffer, BUFFER_SIZE);
+		if (*b_read == -1)
+			return (free(line), NULL);
+		buffer[*b_read] = '\0';
+		temp = ft_strjoin(line, buffer);
+		if (!temp)
+			return (free(line), NULL);
+		free(line);
+		line = temp;
 	}
-	len = (size_t)(newline - *leftover) + 1;
-	line = ft_substr(*leftover, 0, len);
-	if (!line)
-		return (cleaner(leftover));
-	temp_leftover = ft_strdup(*leftover + len);
-	cleaner(leftover);
-	if (!temp_leftover)
-		return (free(line), NULL);
-	*leftover = temp_leftover;
 	return (line);
 }
 
-static char	*find_nextline(int fd, char *leftover)
+static char	*extract_line(char *line)
 {
-	char	*buffer;
-	ssize_t	b_read;
-	char	*tmp;
+	size_t	i;
 
-	buffer = (char *)malloc(BUFFER_SIZE + 1);
-	if (!buffer)
-		return (cleaner(&leftover));
-	b_read = 1;
-	if (!leftover)
-		leftover = ft_strdup("");
-	if (!leftover)
-		return (free(buffer), NULL);
-	while (!ft_strchr(leftover, '\n') && b_read > 0)
-	{
-		b_read = read(fd, buffer, BUFFER_SIZE);
-		if (b_read == (ssize_t) - 1)
-			return (free(buffer), cleaner(&leftover));
-		buffer[b_read] = '\0';
-		tmp = leftover;
-		leftover = ft_strjoin(leftover, buffer);
-		free(tmp);
-		if (!leftover)
-			break ;
-	}
-	return (free(buffer), leftover);
+	i = 0;
+	while (line[i] && line[i] != '\n')
+		i++;
+	if (line[i] == '\n')
+		return (ft_substr(line, 0, i + 1));
+	else
+		return (ft_strdup(line));
+}
+
+static void	buffer_clean(char *buffer)
+{
+	size_t	i;
+
+	i = 0;
+	while (buffer[i] && buffer[i] != '\n')
+		i++;
+	if (buffer[i] == '\n')
+		ft_memcpy(buffer, ft_strchr(buffer, '\n') + 1,
+			ft_strlen(ft_strchr(buffer, '\n')));
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*leftover[OPEN_MAX];
+	static char	buffer[BUFFER_SIZE + 1][FOPEN_MAX];
+	int			b_read;
 	char		*line;
+	char		*temp;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || fd >= OPEN_MAX)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, buffer, 0) == -1)
+		return (ft_memcpy(buffer, "\0", 1), NULL);
+	line = ft_strdup(buffer);
+	if (!line)
 		return (NULL);
-	leftover[fd] = find_nextline(fd, leftover[fd]);
-	if (!leftover[fd] || !*leftover[fd])
-		return (cleaner(&leftover[fd]));
-	line = get_line(&leftover[fd]);
-	return (line);
+	line = ft_read(fd, buffer, line, &b_read);
+	if (!line)
+		return (NULL);
+	if (ft_strlen(line) == 0 && b_read == 0)
+		return (free(line), NULL);
+	temp = extract_line(line);
+	return (buffer_clean(buffer), free(line), temp);
 }
