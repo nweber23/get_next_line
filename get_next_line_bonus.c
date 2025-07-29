@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 12:04:23 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/29 11:48:23 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/29 13:25:20 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,12 @@ static void	buffer_clean(char *buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[FOPEN_MAX][BUFFER_SIZE + 1];
+	static char	buffer[1024][BUFFER_SIZE + 1];
 	int			b_read;
 	char		*line;
 	char		*temp;
 
-	if (fd < 0 || fd >= FOPEN_MAX || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd >= 1024 || BUFFER_SIZE <= 0)
 		return (NULL);
 	line = ft_strdup(buffer[fd]);
 	if (!line)
