@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:20:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/14 09:53:46 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/29 11:48:31 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char	*ft_read(int fd, char *buffer, char *line, int *b_read)
 	{
 		*b_read = read(fd, buffer, BUFFER_SIZE);
 		if (*b_read == -1)
-			return (free(line), NULL);
+			return (ft_memcpy(buffer, "\0", 1), free(line), NULL);
 		buffer[*b_read] = '\0';
 		temp = ft_strjoin(line, buffer);
 		if (!temp)
@@ -83,7 +83,7 @@ char	*get_next_line(int fd)
 	char		*line;
 	char		*temp;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, buffer, 0) == -1)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (ft_memcpy(buffer, "\0", 1), NULL);
 	line = ft_strdup(buffer);
 	if (!line)
